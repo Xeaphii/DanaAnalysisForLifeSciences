@@ -31,3 +31,17 @@ X <- model.matrix(~ type + leg, data=spider)
 (Sigma <- sum(fitTL$residuals^2)/(nrow(X) - ncol(X)) * solve(t(X) %*% X))
 C <- matrix(c(0,0,-1,0,1),1,5)
 Cov(beta-hat_L4, beta-hat_L2)
+
+
+spider$log2friction <- log2(spider$friction)
+boxplot(log2friction ~ type*leg, data=spider)
+
+
+X <- model.matrix(~ type + leg + type:leg, data=spider)
+fitX <- lm(log2friction ~ type + leg + type:leg, data=spider)
+summary(fitX)
+
+
+anova(fitX)
+L3vsL2 <- contrast(fitX,list(leg="L2",type="push"),list(leg="L1",type="push"))
+L3vsL2
